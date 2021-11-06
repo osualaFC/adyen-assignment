@@ -15,13 +15,14 @@ if (!file("local.gradle").exists()) {
 apply from: "local.gradle"
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 30
     defaultConfig {
         applicationId "com.adyen.android.assignment"
         minSdkVersion 21
-        targetSdkVersion 31
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField "String", "FOURSQUARE_BASE_URL", "\"https://api.foursquare.com/v2/\""
@@ -35,6 +36,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+    buildFeatures {
+        viewBinding true
     }
     buildTypes {
         release {
@@ -64,15 +68,14 @@ dependencies {
 
     // Network
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
-    implementation "com.squareup.retrofit2:converter-moshi:$moshi_converter_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
     implementation "com.squareup.okhttp3:okhttp:$okHttp_version"
     implementation "com.squareup.okhttp3:logging-interceptor:$okHttp_version"
-    implementation "com.squareup.moshi:moshi-kotlin:$moshi_version"
-    kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
     implementation 'com.google.code.gson:gson:2.8.6'
 
     // RxJava
     implementation "io.reactivex.rxjava2:rxjava:$rxjava_version"
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
     implementation "io.reactivex.rxjava2:rxkotlin:$rxkotlin_version"
     implementation "io.reactivex.rxjava2:rxandroid:$rxandroid_version"
 
@@ -82,15 +85,11 @@ dependencies {
     androidTestImplementation "com.google.dagger:hilt-android-testing:$hilt_version"
     kaptAndroidTest "com.google.dagger:hilt-android-compiler:$hilt_version"
 
-    // Cache
-    implementation "androidx.room:room-runtime:$room_version"
-    implementation "androidx.room:room-ktx:$room_version"
-    implementation "androidx.room:room-rxjava2:$room_version"
-    kapt "androidx.room:room-compiler:$room_version"
+    //Lottie animation
+    implementation "com.airbnb.android:lottie:3.4.4"
 
-    //Glide
-    implementation "com.github.bumptech.glide:glide:$glide_version"
-    kapt "com.github.bumptech.glide:compiler:$glide_version"
+    //Location
+    implementation "com.google.android.gms:play-services-location:$location_version"
 
     // Testing Dependencies
     testImplementation "junit:junit:$junit_version"
@@ -99,7 +98,6 @@ dependencies {
 
     // Dependencies for both test and AndroidTest
     debugImplementation "com.google.truth:truth:$google_truth_version"
-    testImplementation "androidx.room:room-testing:$room_version"
     debugImplementation "androidx.arch.core:core-testing:$androidx_core_testing_version"
     debugImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_test_version"
     debugImplementation ("androidx.fragment:fragment-testing:$fragment_testing_version") {

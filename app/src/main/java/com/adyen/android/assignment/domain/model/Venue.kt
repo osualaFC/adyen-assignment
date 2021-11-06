@@ -6,5 +6,5 @@ data class Venue(
     val distance: Int,
     val longitude: Double,
     val latitude: Double,
-    val address: List<String>
+    val address: List<String>?
 )

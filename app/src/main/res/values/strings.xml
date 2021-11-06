@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Android Assignment</string>
+    <string name="header_foursquare_places">FourSquare Places</string>
+    <string name="action_get_direction">Get Direction</string>
+    <string name="check_your_internet_connection_and_try_again">Check your internet connection and try again</string>
+    <string name="ooops_something_went_wrong">Ooops!...something went wrong</string>
+    <string name="try_again">Try again</string>
+    <string name="whoop_no_venues_found_at_this_location">Whoop! No venues found at this location</string>
 </resources>
