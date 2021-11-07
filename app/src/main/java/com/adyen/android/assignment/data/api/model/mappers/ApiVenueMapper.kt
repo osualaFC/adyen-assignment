@@ -6,7 +6,7 @@ import javax.inject.Inject
 
 class ApiVenueMapper @Inject constructor() : ApiMapper<RecommendedItem, Venue> {
 
-    override fun mapToDomain(apiEntity: RecommendedItem): Venue {
+    override fun mapData(apiEntity: RecommendedItem): Venue {
         return Venue(
             id = apiEntity.venue.id,
             name = apiEntity.venue.name,

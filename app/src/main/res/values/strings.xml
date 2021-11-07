@@ -6,4 +6,7 @@
     <string name="ooops_something_went_wrong">Ooops!...something went wrong</string>
     <string name="try_again">Try again</string>
     <string name="whoop_no_venues_found_at_this_location">Whoop! No venues found at this location</string>
+   <string name="title_location">We need this permission</string>
+    <string name="action_permit">Permit</string>
+    <string name="action_location">The app needs this permission to be able to provide for you available places within your location</string>
 </resources>

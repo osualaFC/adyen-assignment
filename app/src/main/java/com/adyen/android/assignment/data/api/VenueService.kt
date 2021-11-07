@@ -8,7 +8,7 @@ import retrofit2.http.QueryMap
 
 interface VenueService {
 
-    @GET("explore")
+    @GET("venues/explore")
      fun getVenues(
         @QueryMap query: Map<String, String>
     ): Single<Response<VenueRecommendationsResponse>>

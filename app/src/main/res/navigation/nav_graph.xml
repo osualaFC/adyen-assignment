@@ -10,4 +10,5 @@
         android:name="com.adyen.android.assignment.presentation.ui.VenuesFragment"
         android:label="fragment_venues"
         tools:layout="@layout/fragment_venues" />
+
 </navigation>

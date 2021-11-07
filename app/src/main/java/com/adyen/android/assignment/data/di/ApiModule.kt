@@ -1,8 +1,8 @@
 package com.adyen.android.assignment.data.di
 
+import com.adyen.android.assignment.BuildConfig
 import com.adyen.android.assignment.data.api.VenueService
 import com.adyen.android.assignment.data.api.interceptors.NetworkStatusInterceptor
-import com.adyen.android.assignment.data.util.Constants.BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -47,7 +47,7 @@ object ApiModule {
     @Singleton
     fun provideRetrofit(client: OkHttpClient, converterFactory: Converter.Factory): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(BuildConfig.FOURSQUARE_BASE_URL)
             .client(client)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(converterFactory)

@@ -3,12 +3,12 @@ package com.adyen.android.assignment.presentation.ui
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
@@ -33,7 +33,7 @@ import dagger.hilt.android.AndroidEntryPoint
 const val REQUEST_CODE_LOCATION_PERMISSION = 1
 
 @AndroidEntryPoint
-class VenuesFragment : Fragment() {
+class VenuesFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private val binding get() = _binding!!
     private var _binding: FragmentVenuesBinding? = null
@@ -58,8 +58,11 @@ class VenuesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         getLocationAccess()
         getAndObserveLivedata()
-        binding.errorViews.btnTryAgain.setOnClickListener {
-           getAndObserveLivedata()
+        binding.apply {
+            search.setOnQueryTextListener(this@VenuesFragment)
+            errorViews.btnTryAgain.setOnClickListener {
+                getAndObserveLivedata()
+            }
         }
     }
 
@@ -79,6 +82,16 @@ class VenuesFragment : Fragment() {
         }
     }
 
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        viewModel.venueList?.let { venuesAdapter.searchVenue(query, it) }
+        return true
+    }
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+        viewModel.venueList?.let { venuesAdapter.searchVenue(newText, it) }
+        return true
+    }
+
     private fun getAndObserveLivedata() {
         viewModel.venuesLiveData.observe(viewLifecycleOwner, EventObserver { result ->
             result.let{
@@ -88,7 +101,8 @@ class VenuesFragment : Fragment() {
                     }
                     Status.SUCCESS -> {
                         binding.lottieLocation.gone()
-                         setupRecyclerView(result.data)
+                        viewModel.venueList = result.data as MutableList<Venue>
+                        setupRecyclerView(result.data)
                     }
 
                     Status.ERROR -> {
@@ -141,18 +155,17 @@ class VenuesFragment : Fragment() {
     }
 
     private fun getLocationUpdates() {
-        locationRequest.interval = 10000000
-        locationRequest.fastestInterval = 10000000
+        locationRequest.interval = 100000
+        locationRequest.fastestInterval = 1000
         locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
                 if (locationResult.locations.isNotEmpty()) {
                     val location = locationResult.lastLocation
                     if (location != null) {
-                        with(binding) {
-                            lottieLocation.gone()
-                        }
-                        viewModel.getVenues(location.latitude, location.longitude)
+                        binding.lottieLocation.gone()
+                         viewModel.getVenues(location.latitude, location.longitude)
+                        getAndObserveLivedata()
                     }
                     else binding.lottieLocation.visible()
                 }

@@ -1,5 +1,6 @@
 package com.adyen.android.assignment.data.api
 
+import com.adyen.android.assignment.BuildConfig
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -7,8 +8,8 @@ import java.util.Locale
 abstract class PlacesQueryBuilder {
     private val baseQueryParams by lazy {
         mapOf(
-            "client_id" to "3STOI1OJXLUHBZI4ZYSQVU0ONHTNYIFYXVYPIVCKJSGQUKUK",
-            "client_secret" to "VU3A4VFI2RMEQDHMTX3THWPISNRT520GTSRCDKJF2QXLC0BG"
+            "client_id" to BuildConfig.CLIENT_ID,
+            "client_secret" to BuildConfig.CLIENT_SECRET
         )
     }
 

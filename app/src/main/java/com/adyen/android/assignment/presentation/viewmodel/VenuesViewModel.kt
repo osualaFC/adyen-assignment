@@ -26,8 +26,9 @@ private val mapper: ApiVenueMapper
 
     val venuesLiveData: LiveData<Event<Resource<List<Venue>>>> get() = _venuesLiveData
     private val _venuesLiveData = MutableLiveData<Event<Resource<List<Venue>>>>()
+    var venueList: MutableList<Venue>? = mutableListOf()
 
-    fun getVenues(latitude : Double,longitude : Double ) {
+    fun getVenues(latitude: Double, longitude : Double ) {
         addDisposable(
             repository.getVenues(latitude, longitude)
                 .doOnSubscribe{
@@ -39,7 +40,7 @@ private val mapper: ApiVenueMapper
                     val venues = mutableListOf<Venue>()
                     venueResponse.response.groups.forEach { venueRecommendationGroup ->
                         venues+=   venueRecommendationGroup.items.map { recommendedItem ->
-                            mapper.mapToDomain(recommendedItem)
+                            mapper.mapData(recommendedItem)
                         }}
                     _venuesLiveData.postValue(Event(Resource.success(venues)))
                 },{

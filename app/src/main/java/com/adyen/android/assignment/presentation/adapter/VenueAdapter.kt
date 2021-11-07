@@ -26,6 +26,17 @@ class VenueAdapter(private val context: Context) : ListAdapter<Venue, VenueAdapt
         holder.bind(item)
     }
 
+    fun searchVenue(query: String?, venues : MutableList<Venue>) {
+        val list = mutableListOf<Venue>()
+        query?.let {
+            list.addAll(venues.filter {
+                it.name.contains(query, true)
+            })
+
+        }?:list.addAll(venues)
+        submitList(ArrayList<Venue>(list))
+    }
+
     inner class VenueViewHolder(
         private val binding: VenuesItemBinding
     ) : RecyclerView.ViewHolder(binding.root) {
