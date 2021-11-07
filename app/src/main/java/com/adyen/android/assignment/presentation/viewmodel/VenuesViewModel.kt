@@ -1,9 +1,8 @@
 package com.adyen.android.assignment.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.adyen.android.assignment.base.BaseViewModel
+import androidx.lifecycle.ViewModel
 import com.adyen.android.assignment.data.api.model.mappers.ApiVenueMapper
 import com.adyen.android.assignment.domain.model.Venue
 import com.adyen.android.assignment.domain.repository.VenueRepository
@@ -12,6 +11,8 @@ import com.adyen.android.assignment.presentation.util.ExceptionHelper
 import com.adyen.android.assignment.presentation.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
@@ -19,13 +20,12 @@ import javax.inject.Inject
 class VenuesViewModel @Inject constructor(
 private val repository: VenueRepository,
 private val mapper: ApiVenueMapper
-) : BaseViewModel() {
+) : ViewModel() {
+
+    private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     val venuesLiveData: LiveData<Event<Resource<List<Venue>>>> get() = _venuesLiveData
     private val _venuesLiveData = MutableLiveData<Event<Resource<List<Venue>>>>()
-
-    var latitude : Double? = null
-    var longitude : Double? = null
 
     fun getVenues(latitude : Double,longitude : Double ) {
         addDisposable(
@@ -41,7 +41,6 @@ private val mapper: ApiVenueMapper
                         venues+=   venueRecommendationGroup.items.map { recommendedItem ->
                             mapper.mapToDomain(recommendedItem)
                         }}
-                    Log.i("TAG", "getVenues: $venues")
                     _venuesLiveData.postValue(Event(Resource.success(venues)))
                 },{
                     val exception = ExceptionHelper.getException(it)
@@ -50,6 +49,16 @@ private val mapper: ApiVenueMapper
         )
     }
 
+    private fun addDisposable(disposable: Disposable) {
+        compositeDisposable.add(disposable)
+    }
 
+    private fun clearDisposables() {
+        compositeDisposable.clear()
+    }
+
+    override fun onCleared() {
+        clearDisposables()
+    }
 
 }

@@ -80,7 +80,6 @@ class VenuesFragment : Fragment() {
     }
 
     private fun getAndObserveLivedata() {
-        Log.i("TAG", "getAndObserveLivedata: observing...")
         viewModel.venuesLiveData.observe(viewLifecycleOwner, EventObserver { result ->
             result.let{
                 when(result.status) {
